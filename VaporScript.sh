@@ -15,16 +15,20 @@ sleepTime=6h
 #functions
 #######
 
+function log {
+	printf "%-30s%s" "$(date)" "$1" >> $vaporLog
+	printf "%-30s%s" "$(date)" "$1"
+}
+
 function loadConfig {
 	echo nothing
 }
 
-
-
 #main
 #####
 
-echo vaporScript 18-07-25
+echo "vaporScript"
+log "vaporScript 18-07-25"
 
 mkdir -p $vaporFolder
 touch $vaporGameList
@@ -33,6 +37,7 @@ touch $vaporLog
 
 while [ true ]
 do
+	log "Starting update check..."
 	cmd="steamcmd +login $user"
 	echo "" > $vaporGameList
 
@@ -59,8 +64,9 @@ do
 	$cmd
 
 	echo "" > $vaporGameList
-	echo "#####DONE#####"
+	log "Update check done!"
 
+	log "Waiting $sleepTime..."
 	sleep $sleepTime
 done
 exit
