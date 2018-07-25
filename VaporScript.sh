@@ -16,8 +16,8 @@ sleepTime=6h
 #######
 
 function log {
-	printf "%-30s%s" "$(date)" "$1" >> $vaporLog
-	printf "%-30s%s" "$(date)" "$1"
+	printf "%-30s%s\n" "$(date)" "$1" >> $vaporLog
+	printf "%-30s%s\n" "$(date)" "$1"
 }
 
 function loadConfig {
