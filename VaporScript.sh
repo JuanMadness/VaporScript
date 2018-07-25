@@ -1,17 +1,39 @@
 #!/bin/bash
-#steamcmd +login spoker14 +app_update $line +quit
+#steamcmd +login user +app_update $line +quit
 
-vaporFolder=Vapor
-vaporGameList=$vaporFolder/VaporGameList.tmp
+#parameter
+########
 
-echo VaporScript 18-07-23
+vaporFolder=vapor
+vaporGameList=$vaporFolder/vaporGameList.tmp
+vaporConfig=$vaporFolder/vapor.conf
+vaporLog=$vaporFolder/vapor.log
+user=spoker14
+userPw=
+sleepTime=6h
+
+#functions
+#######
+
+function loadConfig {
+	echo nothing
+}
+
+
+
+#main
+#####
+
+echo vaporScript 18-07-25
 
 mkdir -p $vaporFolder
 touch $vaporGameList
+touch $vaporConfig
+touch $vaporLog
 
 while [ true ]
 do
-	cmd="steamcmd +login spoker14"
+	cmd="steamcmd +login $user"
 	echo "" > $vaporGameList
 
 	grep -rnw 'appid' *.acf | grep -Eo '[0-9]{2,10}' | while read line
@@ -39,6 +61,6 @@ do
 	echo "" > $vaporGameList
 	echo "#####DONE#####"
 
-	sleep 1h
+	sleep $sleepTime
 done
 exit
