@@ -3,7 +3,7 @@
 
 #parameter
 ########
-vaporVersion=18-07-25
+vaporVersion=18-07-28
 vaporFolder=vapor
 vaporGameList=$vaporFolder/vaporGameList.tmp
 vaporAddGameList=$vaporFolder/vaporAddGameList.txt
@@ -12,9 +12,10 @@ vaporLog=$vaporFolder/vapor.log
 
 steamLib=.
 steamcmdPath=
-user=spoker14
-userPw=
+user=anonymous
+userPw=""
 sleepTime=12h
+loopMode=false
 
 #functions
 #######
@@ -32,7 +33,23 @@ function closedScript {
 
 function loadConfig {
 	log "Loading config..."
-	log "FEATURE NOT IMPLEMENTED :("
+	
+	user=$(grep -oP '(?<=user=)\w+' $vaporConfig)
+	echo $user
+	if [ $user -eq " " ]
+	then
+		user=anonymous
+	fi
+
+	userPw=$(grep -oP '(?<=userPw=)\w+' $vaporConfig)
+
+	sleepTime=$(grep -oP '(?<=sleepTime=)\w+' $vaporConfig)
+
+	loopMode=$(grep -oP '(?<=loopMode=)\w+' $vaporConfig)
+	if [ $loopMode -ne "true" || $loopMode -ne "false" ]
+	then
+		loopMode=false
+	fi
 }
 
 #main
@@ -48,12 +65,12 @@ touch $vaporConfig
 touch $vaporLog
 touch $vaporAddGameList
 
-while [ true ]
+while true
 do
-	loadConfig
+	#loadConfig
 
 	log "Starting update check..."
-	cmd="steamcmd +login $user"
+	cmd="steamcmd +login $user $userPw"
 	echo "" > $vaporGameList
 
 	grep -rnw 'appid' $steamLib/*.acf | grep -Eo '[0-9]{2,10}' | while read line
@@ -81,7 +98,12 @@ do
 	echo "" > $vaporGameList
 	log "Update check done!"
 
-	log "Waiting $sleepTime..."
-	sleep $sleepTime
+	if $loopMode 
+	then
+		log "Waiting $sleepTime..."
+		sleep $sleepTime
+	else
+		exit 0
+	fi
 done
-exit
+exit 0
