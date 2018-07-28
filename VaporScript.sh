@@ -35,18 +35,21 @@ function loadConfig {
 	log "Loading config..."
 	
 	user=$(grep -oP '(?<=user=)\w+' $vaporConfig)
-	echo $user
-	if [ $user -eq " " ]
+	log "$user"
+	if ! [ "$user" =~ [^\s-] ]
 	then
 		user=anonymous
 	fi
 
 	userPw=$(grep -oP '(?<=userPw=)\w+' $vaporConfig)
+	#
 
 	sleepTime=$(grep -oP '(?<=sleepTime=)\w+' $vaporConfig)
+	#check with regex
+
 
 	loopMode=$(grep -oP '(?<=loopMode=)\w+' $vaporConfig)
-	if [ $loopMode -ne "true" || $loopMode -ne "false" ]
+	if [ "$loopMode" != "true" ] && [ "$loopMode" != "false" ]
 	then
 		loopMode=false
 	fi
